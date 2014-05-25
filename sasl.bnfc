@@ -1,0 +1,63 @@
+ProgFunsExpr. System  ::= Funcdefs "." Expr ;
+ProgExpr. System  ::= Expr ;
+
+Fun.   Funcdef ::= "def" Definition ;
+Funs.  Funcdefs ::= [Funcdef] ;
+terminator nonempty Funcdef "" ;
+
+Def. Definition ::= [Name] "=" Expr ;
+separator nonempty Name "" ;
+Defs. Definitions ::= [Definition] ;
+separator nonempty Definition ";" ;
+
+ExprWhere. Expr ::= Expr "where" Definitions ;
+ExprCond.  Expr ::= CondExpr ;
+CondIf. CondExpr ::= "if" Expr "then" CondExpr "else" CondExpr ;
+CondListExpr. CondExpr ::= Listexpr ;
+ListOpExpr. Listexpr ::= [Opexpr] ;
+separator nonempty Opexpr ":" ;
+EOr. Opexpr ::= Opexpr "or" Opexpr1 ;
+EAnd. Opexpr1 ::= Opexpr1 "and" Opexpr2 ;
+ERel. Opexpr2 ::= Opexpr2 Relop Opexpr3 ;
+EAdd. Opexpr3 ::= Opexpr3 Addop Opexpr4 ;
+EMul. Opexpr4 ::= Opexpr4 Mulop Opexpr5 ;
+EPre. Opexpr5 ::= Prefix Opexpr6 ;
+EJux. Opexpr6 ::= [Simple] ;
+separator nonempty Simple "" ;
+SName. Simple ::= Name ;
+SBuiltin. Simple ::= Builtin ;
+SConst. Simple ::= Constant ;
+SExpr. Simple ::= "(" Expr ")" ;
+coercions Opexpr 6 ;
+
+token Name (letter|'_')(letter|digit|'_')* ;
+
+Bhd. Builtin ::= "hd" ;
+Btl. Builtin ::= "tl" ;
+
+ConstInt. Constant ::= Integer ;
+ConstBool. Constant ::= Boolean ;
+ConstStr. Constant ::= String ;
+ConstNil. Constant ::= "nil" ;
+ConstList. Constant ::= "[" [Expr] "]";
+separator Expr "," ;
+
+PrefixMinus. Prefix ::= "-" ;
+PrefixPlus. Prefix ::= "+" ;
+PrefixNot. Prefix ::= "not" ;
+
+AddopPlus. Addop ::= "+" ;
+AddopMinus. Addop ::= "-" ;
+
+MulopMult. Mulop ::= "*" ;
+MulopDiv. Mulop ::= "/" ;
+
+RelopEq. Relop ::= "=" ;
+RelopNeq. Relop ::= "~=" ;
+RelopLt. Relop ::= "<" ;
+RelopGt. Relop ::= ">" ;
+RelopLe. Relop ::= "<=" ;
+RelopGe. Relop ::= ">=" ;
+
+BoolT. Boolean ::= "true" ;
+BoolF. Boolean ::= "false" ;
